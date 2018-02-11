@@ -55,14 +55,11 @@ export  class GREATKNOCKS extends Component {
 
   List=(ar)=>{
       return ar.map(function (thumb, index) {
-        console.log("asaa111",thumb);
          this.setState({imglist:ds.cloneWithRows(thumb),refreshing: true,})
       }.bind(this));
   }
   thumb=(t,index)=>{
     let uri=(t.snippet.thumbnails)?t.snippet.thumbnails.high.url:'https://i.ytimg.com/vi/V4DDt30Aat4/hqdefault.jpg';
-      console.log("aaaaas",t);
-      console.log("aa",t.snippet.resourceId.videoId);
       return(
           <View key={index}>
               <Card style={{flexDirection:'column',backgroundColor:"#00838F"}}>

@@ -31,11 +31,20 @@ module.exports = StyleSheet.create({
     borderWidth:1,
     alignItems:'center'
   },
+  WebViewContainer: {
+
+    marginTop: 0,
+
+  },
+  thumview:{
+    width:width,
+    height:height/3.8,
+  },
   thumbimg:{
     width:width,
-    height:height/4,
+    height:height/3.8,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
   },
   header:{
     backgroundColor:'#006064'

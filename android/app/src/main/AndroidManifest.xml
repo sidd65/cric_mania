@@ -14,10 +14,10 @@
       android:name=".MainApplication"
       android:allowBackup="true"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:theme="@style/AppTheme">
+      android:icon="@drawable/cric"
+        android:theme="@style/SplashTheme">
       <activity
-        android:name=".MainActivity"
+        android:name=".splash"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
@@ -26,6 +26,13 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:theme="@style/SplashTheme"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"/>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 

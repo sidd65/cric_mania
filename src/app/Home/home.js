@@ -20,7 +20,7 @@ let img=[
     {
         title:'Greatest Knocks',
         id:'PL_fkSZyETSkwf5gpJgL3c9wfTfm3kzR2O',
-        img:require('cric_mania/src/assets/images/gk2.jpg')
+        img:require('cric_mania/src/assets/images/bat.jpg')
 
     },
     {
@@ -62,10 +62,10 @@ export default class HOME extends Component {
       return(
           <View key={index}>
               <Card style={{flexDirection:'column'}}>
-                  <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={()=>{_navigator.navigate('GREATKNOCKS',{cricket:cricket})}} >
+                  <TouchableOpacity style={Styles.thumview} onPress={()=>{_navigator.navigate('GREATKNOCKS',{cricket:cricket})}} >
                     <Image key={index} style={Styles.thumbimg}source={cricket.img}>
                         <Text style={Styles.headings}>
-                          {cricket.title}
+
                         </Text>
                     </Image>
                   </TouchableOpacity>

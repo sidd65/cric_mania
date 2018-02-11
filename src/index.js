@@ -19,6 +19,7 @@ export default class cric_mania extends Component {
         componentDidMount = async()=> {
           AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
           AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+          AdMobRewarded.setAdUnitID('ca-app-pub-3940256099942544/5224354917 ');
           let myArray = await AsyncStorage.getItem('favt');
                  if (myArray !== null) {
           fav=JSON.parse(myArray)

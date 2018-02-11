@@ -8,10 +8,11 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,TouchableOpacity,ListView,Image,Dimensions,Share,AsyncStorage,
-  Text,
+  Text,WebView,
   View
 } from 'react-native';
 import YouTube from 'react-native-youtube'
+import AdMobRewarded from 'react-native-admob'
 import Styles from './styles.css'
 var id='PLtineFwLo0jc_RT2VEtwSYP48796yAUep'
 import { Container, Header, Title, Button, Left, Right, Body, Icon,Card,Content } from 'native-base';
@@ -21,10 +22,12 @@ import {greatknocks} from 'cric_mania/src/lib/webservice'
 var key='AIzaSyDUvJfXTiUg9cjT4c_LK_9xdP36U6loZLA'
 let height=Dimensions.get('window').height;
 let fav=[];
-var ar=[]
+var ar=[];
+let favlist=[];
 let img=require('cric_mania/src/assets/images/heart.png')
 let img2=require('cric_mania/src/assets/images/favorite.png')
 import Fav from './favourites'
+import { YouTubeStandaloneAndroid } from 'react-native-youtube';
 export  class playvideo extends Component {
     constructor(props){
       super(props)
@@ -37,10 +40,20 @@ export  class playvideo extends Component {
         uri:this.params.th,
         t:false,
          height: 215,
+
         f:false,
         getdata:this.params.getdata,
         ful:true
       }
+    }
+    // componentDidMount=()=>{
+    // console.log("aaaa12334455s",this._mylist());
+    // }
+    componentDidMount = ()=> {
+      console.log("aaaa");
+     this.getdata()
+     AdMobRewarded.requestAd().then(() => AdMobRewarded.showAd());
+
     }
     List=(ar)=>{
         return ar.map(function (thumb, index) {
@@ -58,7 +71,7 @@ export  class playvideo extends Component {
                   <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>{_navigator.navigate('playvideo',{videoid:t.snippet.resourceId.videoId,title:t.snippet.title,listid:this.state.id,th:uri})}} >
                       <Image key={index} style={Styles.playvideolist} source={{uri:uri}}/>
                       <Text style={Styles.listtitle}>
-                        {this.state.title}
+                        {t.snippet.title}
                       </Text>
                   </TouchableOpacity>
               </View>
@@ -78,33 +91,55 @@ export  class playvideo extends Component {
     deleterec = async() => {
         let remwallpaper=[]
         let updatedwall=[]
+                     fav=fav.filter((i)=>i.u!=this.state.videoid)
 
-
-                     _fav=_fav.filter((i)=>i.u!=this.state.videoid)
-
-
+                     this.setState({t:false,f:false})
                         //updatedwall=remwallpape
-                await  AsyncStorage.setItem('favt', JSON.stringify(_fav));
-
+                await  AsyncStorage.setItem('favt', JSON.stringify(fav));
 
          }
     Addtoafv=()=>{
+      if (favlist.length==0) {
+        fav.push({u:this.state.videoid,title:this.state.title,thumbnails:this.state.uri,listid:this.state.listid});
+        AsyncStorage.setItem('favt',JSON.stringify(fav));
+        this.setState({t:!this.state.t});
+      }else {
+        for (var i = 0; i < favlist.length; i++) {
+          if ( favlist[i].u!=this.state.videoid) {
+           fav.push({u:this.state.videoid,title:this.state.title,thumbnails:this.state.uri,listid:this.state.listid});
+           AsyncStorage.setItem('favt',JSON.stringify(fav));
+           this.setState({t:!this.state.t});
+         }
+        }
+      }
 
-        _fav.push({u:this.state.videoid,title:this.state.title,thumbnails:this.state.uri,listid:this.state.listid})
-        console.log("aaaaa111111",_fav);
-        AsyncStorage.setItem('favt',JSON.stringify(_fav));
+      // console.log(favlist);
+      // if (favlist!=null) {
+      // for (var i = 0; i < favlist.length; i++) {
+      //   console.log("aasas34",favlist[i]);
+      //     if ( favlist[i].u!==this.state.videoid) {
+      //       fav.push({u:this.state.videoid,title:this.state.title,thumbnails:this.state.uri,listid:this.state.listid});
+      //       AsyncStorage.setItem('favt',JSON.stringify(fav));
+      //       this.setState({t:!this.state.t});
+      //     }
+      //   }
+      //   }else {
+      //     console.log("dddddd");
+      //
+      //   }
 
-        this.setState({t:!this.state.t})
-    }
+      }
+
+
     getasynclist=async()=>{
         let myArray = await AsyncStorage.getItem('favt');
                if (myArray !== null) {
         // We have data!!
-        fav=JSON.parse(myArray)
+        favlist=JSON.parse(myArray)
     }
-    for (var i = 0; i < fav.length; i++)
+    for (var i = 0; i < favlist.length; i++)
     {
-            if (this.state.videoid == fav[i].u)
+            if (this.state.videoid == favlist[i].u)
             {
                 this.setState({f:true})
 
@@ -122,9 +157,18 @@ export  class playvideo extends Component {
          console.log(e);
      });
      this.getasynclist()
-     setTimeout(() => this.setState({ ful: false }), 1000);
-  }
 
+  }
+  openPlayer = (videoId) => {
+   YouTubeStandaloneAndroid.playVideo({
+    apiKey:'AIzaSyDUvJfXTiUg9cjT4c_LK_9xdP36U6loZLA',
+     videoId,
+     lightboxMode:true,
+     autoplay: true
+   })
+     .then(() => console.log('Player closed'))
+     .catch(e => console.error(e));
+ };
   handleReady = () => {
         setTimeout(() => this.setState({ height: 216 }), 200);
     }
@@ -132,17 +176,18 @@ export  class playvideo extends Component {
   render() {
     return (
       <Container>
+
       <YouTube
-          apiKey='AIzaSyDUvJfXTiUg9cjT4c_LK_9xdP36U6loZLA'
-          videoId={this.state.videoid}   // The YouTube video ID
-          play={false}             // control playback of video with true/false
-              // control whether the video should play in fullscreen or inline
-          loop={true}
-                  // control whether the video should loop when ended
-          style={{ alignSelf: 'auto', height: this.state.height }}
-          showinfo={false}
-          onReady  = {this.handleReady}
-            />
+        videoId={this.state.videoid}   // The YouTube video ID
+          play={true}
+           onReady  = {this.handleReady}
+           fullscreen={true} 
+          apiKey= 'AIzaSyDUvJfXTiUg9cjT4c_LK_9xdP36U6loZLA'            // control playback of video with true/false
+          // control whether the video should play in fullscreen or inline            // control whether the video should loop when ended
+
+    style={{ alignSelf: 'stretch', height: this.state.height   }}
+  />
+
           <Content  bounces={false} style={{backgroundColor:"#00838F"}} >
 
             <View style={{marginLeft:10,marginTop:10}}>
@@ -167,6 +212,7 @@ export  class playvideo extends Component {
                         contentContainerStyle={{  marginTop:15}}
                         dataSource={this.state.imglist}
                         renderRow={this.thumb}
+                        enableEmptySections={true}
                         onEndReached={this.onEndReach}
                     />
             </View>

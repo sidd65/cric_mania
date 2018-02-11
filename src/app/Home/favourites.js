@@ -8,33 +8,48 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,TouchableOpacity,ScrollView,Image,
-  Text,ListView,AsyncStorage,
+  Text,ListView,AsyncStorage,RefreshControl,
   View
 } from 'react-native';
 import { Container, Header, Left, Right, Body, Button, Title,
          Icon, Content,Tabs,Tab,Card } from 'native-base';
 import Styles from './styles.css';
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+let fav2=[];
+let fav1=[];
 export default class fav extends Component {
         constructor(props) {
             super(props)
             this.state = {
             dataSource: ds.cloneWithRows([]),
+            refreshing:true
             };
         }
 
 
         componentDidMount = ()=> {
+          console.log("aaaa");
          this.getdata()
         }
-
-        getdata=async()=>{
-            let myArray = await AsyncStorage.getItem('favt');
-                   if (myArray !== null) {
-            fav=JSON.parse(myArray)
+        shouldComponentUpdate=async()=>{
+          let myArray = await AsyncStorage.getItem('favt');
+                 if (myArray !== null) {
+          // We have data!!
+         fav1=JSON.parse(myArray)
         }
-        this.setState({dataSource:ds.cloneWithRows(fav),refreshing: true})
+        console.log(fav1);
+          this.setState({dataSource:ds.cloneWithRows(fav1),refreshing: true})
+          if(fav1.length!==fav2.length) return true;
+        }
+        getdata=async()=>{
+          let myArray = await AsyncStorage.getItem('favt');
+                 if (myArray !== null) {
+          // We have data!!
+          fav2=JSON.parse(myArray)
+        }
+        this.setState({dataSource:ds.cloneWithRows(fav2),refreshing: true})
+        console.log("asas");
+        this.setState({refreshing:false})
         }
 
         Nofav = () => {

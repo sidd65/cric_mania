@@ -36,7 +36,7 @@ export  class MainHome extends Component {
                             <Home/>
                       </Tab>
                       <Tab heading="FAVOURITES" tabStyle={{backgroundColor: '#006064'}} activeTabStyle={{backgroundColor: '#006064'}}>
-                          <Fav/>
+                          <Fav ref={(comp) => this._mylist = comp}/>
                       </Tab>
                 </Tabs>
 
